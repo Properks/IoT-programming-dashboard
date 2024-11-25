@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=chrome">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <script src="../static/js/index.js"></script>
+    <!-- <link rel="stylesheet" th:href="@{css/index.css}"> -->
+    <!-- <script th:src="@{js/index.js}"></script> -->
+    <title>주차 현황</title>
+</head>
+<body>
+
+<div class="total-container">
+    <div class="net-bar-container">
+        <div class="net-bar-title">
+            <p>주차 현황</p>
+        </div>
+    </div>
+
+    <div class="parking-content-container">
+        <div class="parking-status-container">
+            <div class="parking-remaining-status-container">
+                <div class="parking-remaining-status-title">
+                    <h2>주차 가능 공간</h2>
+                </div>
+                <div class="parking-remaining-status-display-container">
+                    <div id="parking-remaining-status-number-display">
+                        <h3 id="parking-remaining-status-number">2</h3>
+                    </div>
+                    <div class="parking-remaining-status-position-display">
+                        <div id="first-parking-zone">
+                            <h3>1</h3>
+                        </div>
+                        <div id="second-parking-zone">
+                            <h3>2</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="parking-area-container">
+                
+            </div>
+        </div>
+        <div class="parking-log-container">
+            <div class="parking-past-log-container">
+                <div class="parking-past-log-title">
+                    <h2>주차 기록</h2>
+                </div>
+                <div class="parking-past-log-display-container">
+                    <table class="parking-past-log-table">
+                        <thead>
+                            <tr>
+                                <th class="table-user-label">사용자</th>
+                                <th class="table-time-label">시간</th>
+                                <th class="table-enter-label">출입 여부</th>
+                            </tr>
+                        </thead>
+                        <tbody id="parking-past-log-table-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

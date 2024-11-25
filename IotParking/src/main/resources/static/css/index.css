@@ -1,0 +1,132 @@
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background: linear-gradient(45deg, antiquewhite, gray);
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+.total-container {
+    width: 100%;
+    display: flex;
+}
+
+.net-bar-container {
+    top: 0;
+    margin: 0 auto;
+    width: 100%;
+    background-color:lightblue;
+    position: fixed;
+}
+
+.net-bar-title {
+    padding: 5px;
+    width: 10%;
+    text-align: center;
+}
+
+.parking-content-container {
+    width: 100%;
+    height: calc(100vh - 61px);
+    margin-top: 61px;
+    display: flex;
+}
+
+.parking-content-container > div {
+    width: 50%;
+    padding: 1rem;
+}
+
+.parking-status-container {
+    /* background-color: antiquewhite; */
+}
+
+.parking-log-container {
+    /* background-color: gray; */
+}
+.parking-remaining-status-container, .parking-past-log-container {
+    margin: 0 auto;
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 1em;
+}
+
+.parking-remaining-status-title, .parking-past-log-title {
+    margin: 20px;
+    border-bottom: 1px dashed black;
+    text-align: center;
+}
+.parking-remaining-status-display-container {
+    padding: 0 5% 0 5%;
+    min-height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#parking-remaining-status-number-display {
+    margin: 0 auto;
+    height: fit-content;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    width: fit-content;
+    background-color: aquamarine;
+}
+
+.parking-remaining-status-position-display {
+    width: 70%; 
+    height: fit-content;
+    margin: 0 auto;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    background-color:aliceblue;
+    display: flex;
+}
+
+
+div[id$="-parking-zone"] {
+    height: 40vh;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parking-past-log-display-container{
+    padding: 0 5% 0 5%;
+    min-height: 40vh;
+}
+
+.parking-remaining-status-display-container h3 {
+    margin: 5px;
+    font-size: 100px;
+}
+
+.parking-past-log-table {
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+}
+
+thead {
+    background-color: beige;
+}
+
+.table-user-label {
+    width: 30%;
+}
+.table-time-label {
+    width: 50%;
+}
+.table-enter-label {
+    width: 20%;
+}
