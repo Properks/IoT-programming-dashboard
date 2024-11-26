@@ -83,9 +83,9 @@ table, th, td {
     width: 70%; 
     height: fit-content;
     margin: 0 auto;
-    border: 1px solid black;
-    border-radius: 0.5rem;
-    background-color:aliceblue;
+    /*border: 1px solid black;*/
+    /*border-radius: 0.5rem;*/
+    /*background-color:aliceblue;*/
     display: flex;
 }
 
@@ -99,6 +99,9 @@ div[id$="-parking-zone"] {
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    background-color: rgba(0,255,0,0.8);
 }
 
 .parking-past-log-display-container{

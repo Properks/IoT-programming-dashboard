@@ -6,10 +6,12 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-UA-Compatible" content="ie=chrome">
-    <link rel="stylesheet" href="../static/css/index.css">
-    <script src="../static/js/index.js"></script>
-    <!-- <link rel="stylesheet" th:href="@{css/index.css}"> -->
-    <!-- <script th:src="@{js/index.js}"></script> -->
+<!--    <link rel="stylesheet" href="../static/css/index.css">-->
+<!--    <script src="../static/js/index.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+     <link rel="stylesheet" th:href="@{css/index.css}">
+<!--     <script type="module" th:src="@{js/index.js}"></script>-->
     <title>주차 현황</title>
 </head>
 <body>
@@ -32,10 +34,10 @@
                         <h3 id="parking-remaining-status-number">2</h3>
                     </div>
                     <div class="parking-remaining-status-position-display">
-                        <div id="first-parking-zone">
+                        <div id="1-parking-zone">
                             <h3>1</h3>
                         </div>
-                        <div id="second-parking-zone">
+                        <div id="2-parking-zone">
                             <h3>2</h3>
                         </div>
                     </div>
@@ -69,6 +71,94 @@
     </div>
 </div>
 
+<script>
+    const available_color = "rgba(0,255,0,0.8)";
+    const unavailable_color = "rgba(255,0,0,0.8)";
+    const max_record_length = 10;
 
+    connect();
+
+    function connect() {
+        const socket = new SockJS('/socket');
+        console.log(socket)
+        const stompClient = Stomp.over(socket);
+
+        stompClient.connect( {},
+            (frame) => {
+                console.log("Connected: " + frame);
+
+                stompClient.subscribe("/sensors/user", (messageOutput) => {
+                    const json = JSON.parse(messageOutput.body);
+                    addRecord(json.user, json.time, json.enter);
+                    console.log(json);
+                });
+                stompClient.subscribe("/sensors/light", (messageOutput) => {
+                    const json = JSON.parse(messageOutput.body);
+                    let count = 0;
+                    json.map((value) => {
+                        setParking(value.position, value.parked);
+                        if (!value.parked) {
+                            count++;
+                        }
+                    })
+                    setParkingNumber(count);
+                    console.log(json);
+                });
+                stompClient.subscribe("/sensors/fire", (messageOutput) => {
+                    const json = JSON.parse(messageOutput.body);
+                    if (json.fire) {
+                        alert("화재가 감지되었습니다.");
+                    }
+                    console.log(json);
+                });
+            }
+        );
+        stompClient.onclose = async (e) => {
+            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
+            setTimeout(function () {
+                connect()
+            }, 1000)
+        };
+    }
+
+    function setParking(position, isParked) {
+        let parking_zone = document.getElementById(position + "-parking-zone");
+        if (isParked) {
+            parking_zone.style.backgroundColor = unavailable_color;
+        }
+        else {
+            parking_zone.style.backgroundColor = available_color;
+        }
+    }
+
+    function setParkingNumber(count) {
+        let number = document.getElementById("parking-remaining-status-number");
+        number.textContent = Number(count);
+
+    }
+
+    function addRecord(user, time, enter) {
+        let tr = document.createElement("tr");
+        let userElement = document.createElement("td");
+        let timeElement = document.createElement("td");
+        let enterElement = document.createElement("td");
+
+        userElement.textContent = user;
+        timeElement.textContent = time;
+        enterElement.textContent = enter;
+
+        tr.appendChild(userElement);
+        tr.appendChild(timeElement);
+        tr.appendChild(enterElement);
+
+
+        let tbody = document.getElementById("parking-past-log-table-body");
+        tbody.insertBefore(tr, tbody.firstChild);
+
+        if (tbody.childElementCount > max_record_length) {
+            tbody.removeChild(tbody.lastChild);
+        }
+    }
+</script>
 </body>
 </html>
