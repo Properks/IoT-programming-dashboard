@@ -1,13 +1,11 @@
 package com.example.iotparking.controller;
 
 import com.example.iotparking.dto.ParkingRequestDTO;
+import com.example.iotparking.dto.ParkingResponseDTO;
 import com.example.iotparking.service.ParkingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sensor")
@@ -28,9 +26,14 @@ public class ParkingController {
         return ResponseEntity.ok().body(null);
     }
 
-    @PostMapping("setFire")
+    @PostMapping("/setFire")
     public ResponseEntity<String> setFire(@RequestBody ParkingRequestDTO dto) {
         parkingService.setFire(dto);
         return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/getUser")
+    public ResponseEntity<ParkingResponseDTO.EnterUserResponseListDTO> getUser() {
+        return ResponseEntity.ok().body(ParkingResponseDTO.EnterUserResponseListDTO.toEnterUserResponseListDTO(parkingService.getParkingRecord()));
     }
 }

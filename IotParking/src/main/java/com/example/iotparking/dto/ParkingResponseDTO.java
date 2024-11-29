@@ -1,8 +1,11 @@
 package com.example.iotparking.dto;
 
+import com.example.iotparking.entity.ParkingRecord;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ParkingResponseDTO {
 
@@ -15,11 +18,24 @@ public class ParkingResponseDTO {
         private LocalDateTime time;
         private String enter;
 
-        public static EnterUserResponseDTO toEnterUserResponseDTO(String user, LocalDateTime time, String enter) {
+        public static EnterUserResponseDTO toEnterUserResponseDTO(ParkingRecord parkingRecord) {
             return EnterUserResponseDTO.builder()
-                    .user(user)
-                    .time(time)
-                    .enter(enter)
+                    .user(parkingRecord.getUsername())
+                    .time(parkingRecord.getTime())
+                    .enter(parkingRecord.getEnter())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class EnterUserResponseListDTO {
+        private List<EnterUserResponseDTO> items;
+        public static EnterUserResponseListDTO toEnterUserResponseListDTO(Page<ParkingRecord> parkingRecords) {
+            return EnterUserResponseListDTO.builder()
+                    .items(parkingRecords.getContent().stream().map(EnterUserResponseDTO::toEnterUserResponseDTO).toList())
                     .build();
         }
     }
