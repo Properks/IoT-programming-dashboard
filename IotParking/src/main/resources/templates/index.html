@@ -12,6 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
      <link rel="stylesheet" th:href="@{css/index.css}">
 <!--     <script type="module" th:src="@{js/index.js}"></script>-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
     <title>주차 현황</title>
 </head>
 <body>
@@ -19,14 +22,14 @@
 <div class="total-container">
     <div class="net-bar-container">
         <div class="net-bar-title">
-            <p>주차 현황</p>
+            <h2>주차 현황</h2>
         </div>
     </div>
 
     <div class="parking-content-container">
         <div class="parking-status-container">
             <div class="parking-remaining-status-container">
-                <div class="parking-remaining-status-title">
+                <div class="parking-remaining-status-title" >
                     <h2>주차 가능 공간</h2>
                 </div>
                 <div class="parking-remaining-status-display-container">
@@ -50,7 +53,7 @@
         <div class="parking-log-container">
             <div class="parking-past-log-container">
                 <div class="parking-past-log-title">
-                    <h2>주차 기록</h2>
+                    <h2>출입 기록</h2>
                 </div>
                 <div class="parking-past-log-display-container">
                     <table class="parking-past-log-table">
@@ -72,8 +75,10 @@
 </div>
 
 <script>
-    const available_color = "rgba(0,255,0,0.8)";
-    const unavailable_color = "rgba(255,0,0,0.8)";
+    const available_color = "rgba(0,255,0,0.6)";
+    const unavailable_color = "rgba(255,0,0,0.6)";
+    const in_color = "rgba(0,255,0,0.3)";
+    const out_color = "rgba(255,0,0,0.3)";
     const max_record_length = 10;
 
     connect();
@@ -151,6 +156,16 @@
         tr.appendChild(timeElement);
         tr.appendChild(enterElement);
 
+        if (enter === "out") {
+            userElement.style.backgroundColor = out_color;
+            timeElement.style.backgroundColor = out_color;
+            enterElement.style.backgroundColor = out_color;
+        }
+        else {
+            userElement.style.backgroundColor = in_color;
+            timeElement.style.backgroundColor = in_color;
+            enterElement.style.backgroundColor = in_color;
+        }
 
         let tbody = document.getElementById("parking-past-log-table-body");
         tbody.insertBefore(tr, tbody.firstChild);
