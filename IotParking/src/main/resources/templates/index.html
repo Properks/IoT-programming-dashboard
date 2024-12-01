@@ -82,6 +82,7 @@
     const max_record_length = 10;
 
     connect();
+    getRecords();
 
     function connect() {
         const socket = new SockJS('/socket');
@@ -140,6 +141,19 @@
         let number = document.getElementById("parking-remaining-status-number");
         number.textContent = Number(count);
 
+    }
+
+    function getRecords() {
+        fetch("/sensor/getUser", {method: 'GET'})
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                data.items.map((record) => {
+
+                        addRecord(record.user, record.time, record.enter)
+                })
+            })
     }
 
     function addRecord(user, time, enter) {
