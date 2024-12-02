@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ParkingRecordRepository extends JpaRepository<ParkingRecord, Long> {
-    Page<ParkingRecord> findAllByOrderByTime(Pageable pageable);
+    Page<ParkingRecord> findAllByOrderByTimeAsc(Pageable pageable);
 }
