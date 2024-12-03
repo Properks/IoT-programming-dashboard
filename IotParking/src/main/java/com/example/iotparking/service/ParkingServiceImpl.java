@@ -5,6 +5,7 @@ import com.example.iotparking.dto.ParkingResponseDTO;
 import com.example.iotparking.entity.ParkingRecord;
 import com.example.iotparking.repository.ParkingRecordRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ParkingServiceImpl implements ParkingService {
 
-    private final static int LIGHT_VALUE = 2000;
-    private final static int FIRE_VALUE = 50;
+    private static final int LIGHT_VALUE = 2000;
+    private static final int FIRE_VALUE = 50;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ParkingRecordService parkingRecordService;
     private static Set<String> session = new HashSet<>();
@@ -40,6 +42,7 @@ public class ParkingServiceImpl implements ParkingService {
             );
             session.add(name);
         }
+        log.info("Enter User: {}", name);
         simpMessagingTemplate.convertAndSend("/sensors/user", response);
     }
 
@@ -50,12 +53,14 @@ public class ParkingServiceImpl implements ParkingService {
         for (int i = 0; i < values.length; i++) {
             responses.add(ParkingResponseDTO.LightResponseDTO.toLightResponseDTO(String.valueOf(i + 1), values[i] < LIGHT_VALUE));
         }
+        log.info("Light value: {}", Arrays.toString(values));
         simpMessagingTemplate.convertAndSend("/sensors/light", responses);
     }
 
     @Override
     public void setFire(ParkingRequestDTO dto) {
         int value = Integer.parseInt(dto.getValue());
+        log.info("Fire value: {}", value);
         simpMessagingTemplate.convertAndSend("/sensors/fire", ParkingResponseDTO.FireResponseDTO.toFireResponseDTO(value > FIRE_VALUE));
     }
 
