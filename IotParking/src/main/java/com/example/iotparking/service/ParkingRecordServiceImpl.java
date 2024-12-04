@@ -27,6 +27,6 @@ public class ParkingRecordServiceImpl implements ParkingRecordService {
     @Override
     public Page<ParkingRecord> getParkingRecord(int page, int offset) {
         Pageable pageable = PageRequest.of(page, offset);
-        return parkingRecordRepository.findAllByOrderByTimeAsc(pageable);
+        return parkingRecordRepository.findAllByOrderByTimeDesc(pageable);
     }
 }
