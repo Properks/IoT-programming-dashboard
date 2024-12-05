@@ -20,8 +20,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ParkingServiceImpl implements ParkingService {
 
-    private static final int LIGHT_VALUE = 2000;
-    private static final int FIRE_VALUE = 50;
+    private static final String LIGHT_VALUE = "2000";
+    private static final String FIRE_VALUE = "80";
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ParkingRecordService parkingRecordService;
     private static Set<String> session = new HashSet<>();
@@ -30,6 +30,10 @@ public class ParkingServiceImpl implements ParkingService {
     public void enterParking(ParkingRequestDTO dto) {
         String name = dto.getValue();
         ParkingResponseDTO.EnterUserResponseDTO response;
+        ParkingRecord latest = parkingRecordService.getParkingRecord(0, 1).getContent().get(0);
+        if (latest.getUsername().equals(dto.getValue()) && latest.getTime().isAfter(LocalDateTime.now().minusSeconds(5))) {
+            return;
+        }
         if (session.contains(name)) {
             response = ParkingResponseDTO.EnterUserResponseDTO.toEnterUserResponseDTO(
                     parkingRecordService.save(name, "out")
@@ -48,10 +52,10 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public void changeLight(ParkingRequestDTO dto) {
-        int[] values = Arrays.stream(dto.getValue().split(" ")).map(Integer::parseInt).mapToInt(Integer::intValue).toArray();
+        String[] values = dto.getValue().split(" ");
         List<ParkingResponseDTO.LightResponseDTO> responses = new ArrayList<>();
         for (int i = 0; i < values.length; i++) {
-            responses.add(ParkingResponseDTO.LightResponseDTO.toLightResponseDTO(String.valueOf(i + 1), values[i] < LIGHT_VALUE));
+            responses.add(ParkingResponseDTO.LightResponseDTO.toLightResponseDTO(String.valueOf(i + 1), values[i].compareTo(LIGHT_VALUE) < 0));
         }
         log.info("Light value: {}", Arrays.toString(values));
         simpMessagingTemplate.convertAndSend("/sensors/light", responses);
@@ -59,9 +63,9 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public void setFire(ParkingRequestDTO dto) {
-        int value = Integer.parseInt(dto.getValue());
+        String value = dto.getValue();
         log.info("Fire value: {}", value);
-        simpMessagingTemplate.convertAndSend("/sensors/fire", ParkingResponseDTO.FireResponseDTO.toFireResponseDTO(value > FIRE_VALUE));
+        simpMessagingTemplate.convertAndSend("/sensors/fire", ParkingResponseDTO.FireResponseDTO.toFireResponseDTO(value.compareTo(FIRE_VALUE) > 0));
     }
 
     @Override
